@@ -2,7 +2,7 @@ import {useEffect} from "react";
 import {useDispatch} from "react-redux";
 import {getAllPaintingsAC} from "../src/redux/paintingsReducer";
 import Link from 'next/link';
-import {api, ApiPaintingsData} from "../src/api/api";
+import {api, ApiAllPaintingsData, PaintingType} from "../src/api/api";
 import {GetStaticProps} from 'next'
 
 const Home = ({paintingsArr}) => {
@@ -13,7 +13,11 @@ const Home = ({paintingsArr}) => {
         dispatch(getAllPaintingsAC(paintingsArr));
     }, []);
 
-    const itemsInitMap = paintingsArr.map(item => <Link key={item.name} href={'/painting'}><a style={{display: "block"}}>{item.name}</a></Link>)
+    const itemsInitMap = paintingsArr
+        .map((item: PaintingType) => <Link key={item.name} href="/painting/[id]" as={`/painting/${item.id}`}>
+                <a style={{display: "block"}}>{item.name}</a>
+            </Link>
+        )
 
     return (
         <div>
@@ -26,7 +30,7 @@ export default Home;
 
 export const getStaticProps: GetStaticProps = async (context) => {
 
-    const data: ApiPaintingsData | void = await api.getAllPaintings();
+    const data: ApiAllPaintingsData | void = await api.getAllPaintings();
     const paintingsArr = data && data.data.paintings.items;
 
     return {

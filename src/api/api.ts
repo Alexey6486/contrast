@@ -5,22 +5,28 @@ const instance = axios.create({
 });
 
 export type PaintingType = {
+    id: string
     name: string
     width: string
     height: string
 }
-export type ApiPaintingsData = {
+export type ApiAllPaintingsData = {
     data: {
         paintings: {
             items: Array<PaintingType>
         }
     }
 }
+export type ApiPaintingData = {
+    data: {
+        painting: PaintingType
+    }
+}
 
 export const api = {
     getAllPaintings() {
         return instance
-            .get<ApiPaintingsData>('paintings')
+            .get<ApiAllPaintingsData>('paintings')
             .then(response => {
                 return response.data
             })
@@ -30,7 +36,7 @@ export const api = {
     },
     getPainting(id: string) {
         return instance
-            .get<ApiPaintingsData>(`painting/${id}`)
+            .get<ApiPaintingData>(`paintings/${id}`)
             .then(response => {
                 return response.data
             })
